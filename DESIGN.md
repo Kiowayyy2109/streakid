@@ -392,3 +392,75 @@ Exactly **one** execute was performed.
    carries the final contract address).
 4. Community drive: ≥ 30 unique Agent ID addresses check in before
    2026-12-09 15:00 WIB.
+
+## 10. Phase 2d — site live with final address; check-in preview path proven; BscScan still unconfirmed (2026-11-18 ~19:05–19:15 WIB)
+
+No transaction executed in this phase (preview only).
+
+### Site updated + Pages re-published
+- `site/app.js`: `STREAK_ID_ADDRESS` set to the deployed contract
+  **`0x6E477bffF71313805a5BE07F2Bf735e041FD7f0b`** — verified
+  programmatically after the edit (exact string match on the constant
+  line, zero-address placeholder gone, address re-checksummed EIP-55
+  in code and equal). JS syntax re-validated with Node.
+- `site/` re-copied to `docs/`; pushed to
+  github.com/Kiowayyy2109/streakid via the custom.github connector
+  (Git Data API, same pattern as Phase 2a) — commit
+  **`2f31a9c851600ccebc2ecd9f878ff521fbf088c3`** (24 files: site/,
+  docs/, DESIGN.md, SUBMISSION_DRAFT.md).
+- **Live check: https://kiowayyy2109.github.io/streakid/app.js serves
+  the final address** — confirmed on the 2nd poll (~30 s after the
+  push; 1st poll still served the stale placeholder). The site now
+  points at the live contract; the badge base URI is unchanged and
+  still resolves under the same Pages path.
+
+### First check-in — preview path proven (NOT executed)
+- Selector taken from the compiled artifact
+  (`out/StreakID.sol/StreakID.json` methodIdentifiers): `checkIn()` =
+  **`0x183ff085`** — matches the constant already used in `site/app.js`.
+  Calldata = selector only, no arguments.
+- BAW preview run (Dev Mode confirmed enabled, expires 2026-11-25):
+  `baw contract-call preview --binanceChainId 56
+  --from 0x5892606Efb9D8cAd0dDd7CFBD37e1e4C842CaCD4
+  --to 0x6E477bffF71313805a5BE07F2Bf735e041FD7f0b --value 0
+  --inputData 0x183ff085 --json`
+  → **requestId `2e6900f8a71e43e09e4754294a8fccc8`**, expired
+  2026-11-18 19:09:19 WIB (preview lifetime ≈ 5 min — at tap time the
+  parent re-runs this exact preview fresh and executes with the new
+  requestId).
+- Programmatic verification of the preview (8/8 passed):
+  `contractAddress` = the StreakID contract, `action = 0x183ff085`,
+  `gasTokenFromData = 0` (value 0), simulationCode `000000000` with
+  no error detail, balanceChanges / allowanceChanges /
+  authorityChanges all empty, risks all empty,
+  `requireConfirmation = false`.
+- Independent read-only cross-check via BSC RPC: `eth_call` of
+  checkIn() from Panji's wallet returns `0x` (no revert — he holds
+  kiowayyy.ai, so the gate passes); **`eth_estimateGas` = 99,147
+  gas** → ≈ **0.00000496 BNB** at the live 0.05 gwei spot price
+  (≈ 0.0000156 BNB if the BAW backend prices gas like the deploy's
+  ≈ 0.157 gwei). Agentic balance after deploy: 0.0001755690 BNB —
+  fits either way.
+
+### BscScan-side verification — still NOT confirmed (keyless paths exhausted)
+- One keyless call to the public BscScan API
+  (`api.bscscan.com/api?module=contract&action=getsourcecode&address=…`)
+  returned **HTTP 301**; following the redirect lands on the Etherscan
+  API documentation homepage — the keyless V1 API has been retired,
+  and the V2 API requires an API key (none available in this
+  environment). Combined with the Phase-2c result (public contract
+  page fetch HTTP 403), **no keyless path can confirm or deny
+  BscScan-side verification**. No aggressive retries were made.
+- Status therefore unchanged from §9: **Sourcify full match
+  confirmed** ("already fully verified"); **BscScan display not yet
+  confirmed**. The manual route stays ready in `verification/`
+  (submit `StreakID.standard-input.json` + constructor args on
+  BscScan, or a BscScan API key for `forge verify-contract`).
+
+### Remaining
+1. First real check-in from Panji's Agentic Wallet (his tap on a
+   fresh preview of the exact call above).
+2. Panji submits the in-app Binance survey (SUBMISSION_DRAFT.md
+   carries the final contract address and the live site URL).
+3. Community drive: ≥ 30 unique Agent ID addresses check in before
+   2026-12-09 15:00 WIB.
