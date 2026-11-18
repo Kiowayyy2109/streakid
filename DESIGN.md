@@ -161,3 +161,102 @@ for deploy + first check-in combined.
    addresses** must check in (Innovation Award eligibility; also the
    Pioneer/growth ranking metric). Owner action: share the site link in
    his Agent ID communities; each holder's check-in costs them only gas.
+
+---
+
+## 7. Phase 2a — repo + Pages live; deploy path audited (2026-11-18 ~18:42–19:00 WIB)
+
+No deployment, no spend, no transaction executed in this phase.
+
+### GitHub repo (public)
+- **https://github.com/Kiowayyy2109/streakid** — created via the
+  custom.github connector (PAT, scope `repo`), pushed with the Git Data API.
+- Contents: `contracts/`, `test/`, `script/`, `site/`, `docs/` (Pages copy
+  of `site/`), `verification/`, README, LICENSE, DESIGN.md,
+  SUBMISSION_DRAFT.md, foundry.toml. `lib/forge-std` is a standard public
+  dependency and stays git-ignored (same hygiene as the local repo);
+  StreakID itself has zero imports, so verification does not need it.
+- Push commits: `1933b07` (initial), `66a53a0` (site files briefly landed
+  at repo root — superseded), `1fd4ac5` (moved the published copy into
+  `docs/`, removed the root copies).
+
+### GitHub Pages (live)
+- The Pages API only accepts publishing paths `/` or `/docs` (a `/site`
+  source is rejected with 422), so Pages serves branch `main`, path
+  `/docs`. The local canonical source remains `site/`; **after deployment,
+  update `STREAK_ID_ADDRESS` in `site/app.js` and re-copy `site/` →
+  `docs/` before re-pushing.**
+- **Live at https://kiowayyy2109.github.io/streakid/** — verified HTTP 200
+  (page title/content "StreakID" present) and
+  `https://kiowayyy2109.github.io/streakid/badges/3.json` HTTP 200, so the
+  constructor badge base URI resolves exactly as deployed later.
+- The served `app.js` still carries the zero-address placeholder
+  (`STREAK_ID_ADDRESS = 0x0000…0000`) — nothing points at a contract yet.
+
+### BscScan verification files (in `verification/`)
+- `StreakID.standard-input.json` — the exact Foundry compiler input
+  (solc 0.8.26+commit.8a97fa7a, optimizer 200 runs, evm cancun), cleaned
+  only of Foundry-only keys (`allowPaths`/`basePath`/`includePaths`).
+  **Proven in this phase: recompiling this file with solc 0.8.26
+  reproduces the Phase-1 creation bytecode byte-for-byte, including the
+  metadata hash (full match).** (A hand-built minimal input differed in
+  the metadata trailer only — do not use a hand-built input.)
+- `StreakID.flattened.sol` (reference), `constructor-args.txt`
+  (ABI-encoded `(registry, baseURI)` — registry word asserted equal to
+  the announcement address programmatically), `init-code.txt`
+  (creation bytecode + constructor args = 6,195 bytes), `README.md`
+  with both verification routes. Command route (from README):
+  `forge verify-contract <ADDR> contracts/StreakID.sol:StreakID --chain bsc --constructor-args <from constructor-args.txt>`.
+
+### Deploy path via BAW — AUDITED: native creation is NOT possible
+- Preconditions are fine: BAW session logged in; Developer Mode enabled
+  (expires 2026-11-25 16:23 WIB); dev-mode daily quota untouched.
+- `baw contract-call preview` **requires `--to` for EVM** — omitting it
+  fails with `SERVICE_ERROR "to is required for EVM contract-call"`.
+  A contract-creation transaction needs an empty `to`, so the CLI cannot
+  express one.
+- Tested the only remaining shape: preview with
+  `--to 0x0000000000000000000000000000000000000000` and the full init code
+  as `--inputData` (requestId `835fdf7129ec488b843de6bd218fb29a`, expired
+  2026-11-18 18:52 WIB, **never executed**). BAW parsed it as a plain
+  `ContractInteraction` **call to the zero address** (action shown as the
+  init code's first 4 bytes, `gasLimit: null`, trivial simulation pass).
+  Executing that preview would send calldata to `0x0` and **deploy
+  nothing** — do not use it in Phase 2b.
+- No other deploy facility exists in the BAW skill/CLI surface.
+
+### Recommended deploy routes for Phase 2b (Panji chooses + taps)
+- **Route B (keeps everything inside BAW):** deploy through the canonical
+  CREATE2 factory `0x4e59b44847b379578588920cA78FbF26c0B4956C` (Arachnid
+  deterministic deployment proxy — code presence on BSC verified
+  read-only in this phase, 69 bytes runtime). One BAW contract-call:
+  `to` = factory, `inputData` = `<32-byte salt><init code>`, value 0 —
+  a normal contract call, so the usual preview → Panji tap → execute
+  flow applies. Contract address = CREATE2 address derived from
+  factory + salt + init-code hash (computable and assertable in code
+  before broadcasting). Deployer of record is the factory; StreakID has
+  no owner, so nothing depends on deployer identity. Gas ≈ deploy
+  (1,285,410) + factory overhead — still ≈ 0.00007 BNB at the live
+  0.05 gwei price, well inside the Agentic balance (0.0003784532 BNB,
+  re-read this phase; gas price still 0.05 gwei).
+- **Route A (classic):** a dedicated project EOA whose key is generated
+  locally at deploy time (file mode 600, never printed). Panji funds it
+  with ≈ 0.0001 BNB via one ordinary BAW `wallet send` (his tap), then
+  deployment runs from that EOA with forge/cast. After deployment the
+  key controls nothing (the contract has no owner) and the EOA is
+  retired. Downside vs B: one extra funding transaction and a key file
+  to safeguard until deployment completes.
+- Route B is recommended: no new key, no funding hop, and every step
+  stays inside the preview + tap discipline Panji already uses.
+
+### What exactly waits on Panji
+1. **Choose the deploy route (B recommended, or A)** and give the deploy
+   tap when the Phase-2b preview is shown. Nothing else about the deploy
+   needs him.
+2. After deployment + BscScan verification + site address update: the
+   **first check-in tap** from his Agentic Wallet (proves the gate;
+   ≈ 0.0000065 BNB).
+3. The **in-app Binance survey submission** (SUBMISSION_DRAFT.md) —
+   unchanged, only he can do it.
+4. Community drive to ≥ 30 unique Agent ID check-ins before
+   2026-12-09 15:00 WIB — unchanged.
