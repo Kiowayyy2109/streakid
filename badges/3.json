@@ -1,0 +1,10 @@
+{
+  "name": "StreakID — 3-Day Streak Badge (Bronze)",
+  "description": "Awarded by the StreakID contract on BNB Chain to an Agent ID holder who checked in 3 days in a row. Soulbound: this badge can never be transferred or sold. It is a reputation record only and has no monetary value.",
+  "image": "https://kiowayyy2109.github.io/streakid/badges/badge-3.svg",
+  "attributes": [
+    { "trait_type": "Milestone", "value": "3-day streak" },
+    { "trait_type": "Tier", "value": "Bronze" },
+    { "trait_type": "Transferable", "value": "No — soulbound" }
+  ]
+}

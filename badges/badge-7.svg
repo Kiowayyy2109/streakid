@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+  <rect width="400" height="400" rx="36" fill="#141927"/>
+  <circle cx="200" cy="160" r="92" fill="none" stroke="#c0c0c0" stroke-width="10"/>
+  <text x="200" y="185" font-family="sans-serif" font-size="76" font-weight="bold" fill="#c0c0c0" text-anchor="middle">7</text>
+  <text x="200" y="300" font-family="sans-serif" font-size="30" font-weight="bold" fill="#eef1f8" text-anchor="middle">DAY STREAK</text>
+  <text x="200" y="340" font-family="sans-serif" font-size="22" fill="#9aa5bd" text-anchor="middle">StreakID Silver Badge</text>
+</svg>
