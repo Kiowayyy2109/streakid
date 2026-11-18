@@ -39,8 +39,8 @@ submission channel once the contract is deployed and verified (Phase 2).
 > https://kiowayyy2109.github.io/streakid/
 
 **Smart contract address(es)** (after Phase-2 deploy + BscScan verification)
-> StreakID (BNB Chain mainnet): `TBD — filled in at deployment`
-> BscScan: `https://bscscan.com/address/TBD` (source verified, MIT)
+> StreakID (BNB Chain mainnet): `0x6E477bffF71313805a5BE07F2Bf735e041FD7f0b`
+> BscScan: `https://bscscan.com/address/0x6E477bffF71313805a5BE07F2Bf735e041FD7f0b` (source fully verified on Sourcify; BscScan verification via standard-input JSON prepared, MIT)
 
 **Open-source repository**
 > https://github.com/Kiowayyy2109/streakid (to be created/pushed in Phase 2)

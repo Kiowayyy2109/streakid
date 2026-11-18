@@ -7,9 +7,10 @@
    - No server, no sessions, no QR / pairing-code login, no approvals.
    ===================================================================== */
 
-// ---------------- CONFIG (edit after deployment) --------------------
-// TODO(phase-2): replace with the deployed StreakID address on BNB Chain.
-const STREAK_ID_ADDRESS = "0x0000000000000000000000000000000000000000";
+// ---------------- CONFIG -------------------------------------------
+// Deployed StreakID address on BNB Chain mainnet (CREATE2, deploy tx
+// 0x48edb32d4a54c1f9d4b103cae811395925e1d9efe2eb9745686c284b79ef5a5f).
+const STREAK_ID_ADDRESS = "0x6E477bffF71313805a5BE07F2Bf735e041FD7f0b";
 // SPACE ID Agent ID registry, BNB Chain mainnet (from the official
 // Binance Agent ID Hackathon announcement; EIP-55 checksum verified).
 const AGENT_ID_REGISTRY = "0x60B9262456dE011F7d15a54CdD8c48bAaa8B022F";

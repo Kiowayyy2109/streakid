@@ -260,3 +260,135 @@ No deployment, no spend, no transaction executed in this phase.
    unchanged, only he can do it.
 4. Community drive to ≥ 30 unique Agent ID check-ins before
    2026-12-09 15:00 WIB — unchanged.
+
+---
+
+## 8. Phase 2b — Route B chosen; CREATE2 deploy preview prepared (2026-11-18 ~18:54 WIB)
+
+Panji chose **Route B**. Preview only in this phase — **nothing was
+executed, no transaction sent.**
+
+### Salt & calldata (deterministic, reproducible)
+- Salt string: `StreakID v1 kiowayyy` (UTF-8).
+- **Salt = keccak256("StreakID v1 kiowayyy") =
+  `0x6274da33870be9a51a521ff4bf4f6ef6c4ff6677717dac88f16089d51e3eccbb`**
+- Calldata = salt (32 B) ‖ init code taken **only** from
+  `verification/init-code.txt` (6,195 B) → 6,227 B total.
+- Programmatic assertions (all passed): init code ends exactly with
+  `verification/constructor-args.txt`; the registry word inside those
+  args equals the announcement address
+  `0x60B9262456dE011F7d15a54CdD8c48bAaa8B022F`; string-arg offset = 0x40.
+- Init-code keccak256:
+  `0xc29847a142a32c80c264632421bd6e7db3d57c90d86a984b4ee32ccee46cd583`.
+
+### The contract address that will be born
+- **CREATE2 address: `0x6E477bffF71313805a5BE07F2Bf735e041FD7f0b`**
+  (= keccak256(0xff ‖ factory ‖ salt ‖ keccak256(init code))[12:]).
+
+### Read-only on-chain checks + simulation (BSC RPC)
+- Factory `0x4e59b44847b379578588920cA78FbF26c0B4956C` code = **69 bytes**
+  on BSC ✓ (canonical Arachnid proxy).
+- Target address code = `0x` — **still empty**, nothing deployed there ✓.
+- `eth_call` to the factory from Panji's Agentic Wallet
+  (`0x5892606Efb9D8cAd0dDd7CFBD37e1e4C842CaCD4`) with the exact calldata:
+  **no revert, and the proxy returned exactly
+  `0x6E477bffF71313805a5BE07F2Bf735e041FD7f0b`** — the simulated deploy
+  lands at the computed address ✓.
+- `eth_estimateGas` = **1,311,191 gas** (direct CREATE measured 1,285,410
+  in Phase 1; factory overhead ≈ 25,781). At the live 0.05 gwei price →
+  **final estimated cost ≈ 0.00006556 BNB**; Agentic balance re-read
+  0.0003784532 BNB — fits with ≈ 0.000313 BNB margin.
+
+### BAW preview (prepared, NOT executed)
+- Command shape: `baw contract-call preview --binanceChainId 56
+  --from 0x5892606Efb9D8cAd0dDd7CFBD37e1e4C842CaCD4
+  --to 0x4e59b44847b379578588920cA78FbF26c0B4956C --value 0
+  --inputData <salt‖init code> --json`. Dev Mode confirmed enabled
+  (expires 2026-11-25), session CONNECTED.
+- **requestId: `c705f3e5a1344b728928560529383038`**
+- **Expires: 2026-11-18 18:59:54 WIB** (preview lifetime is only ≈ 5
+  minutes — at execute time, re-run this preview immediately before
+  Panji's tap and execute with the fresh requestId).
+- Parsed result, verified programmatically (11/11 checks passed):
+  `transactionType = ContractInteraction`, `contractAddress` = factory,
+  `action = 0x6274da33` (= first 4 bytes of the salt — expected: the
+  proxy takes raw salt‖init-code calldata, no function selector),
+  simulationCode `000000000` with no error, `gasTokenFromData = 0`,
+  balanceChanges / allowanceChanges / authorityChanges all empty,
+  risks all empty, `requireConfirmation = false`, `gasLimit = null`
+  (backend-estimated).
+
+### Next (waits on Panji's tap)
+1. Fresh preview (same parameters) → show Panji → his tap → `baw
+   contract-call execute --requestId <fresh>` → contract lives at
+   `0x6E477bffF71313805a5BE07F2Bf735e041FD7f0b`.
+2. BscScan verification (files in `verification/`), set
+   `STREAK_ID_ADDRESS` in `site/app.js`, re-copy `site/` → `docs/`, push.
+3. First check-in tap from Panji's Agentic Wallet; then his in-app
+   survey submission; then the ≥ 30 Agent ID community drive.
+
+## 9. Phase 2c — DEPLOYED to BSC mainnet (2026-11-18 ~19:01–19:10 WIB)
+
+Panji approved execution ("Gas, execute deploy sekarang", 18:59 WIB).
+Exactly **one** execute was performed.
+
+### Fresh preview (re-run immediately before execute)
+- Same parameters as §8 (factory `0x4e59b44847b379578588920cA78FbF26c0B4956C`,
+  calldata = salt `0x6274da33…eccbb` ‖ init code from
+  `verification/init-code.txt`, value 0, from Agentic Wallet
+  `0x5892606Efb9D8cAd0dDd7CFBD37e1e4C842CaCD4`). Dev Mode re-confirmed
+  enabled (expires 2026-11-25).
+- **requestId: `31a11796213e4623a0925ac7cc1d3143`** (the §8 preview
+  `c705f3e5…` had expired and was NOT used).
+- Programmatic verification of the fresh preview (10/10 passed):
+  `transactionType = ContractInteraction`, `contractAddress` = factory,
+  `action = 0x6274da33`, `gasTokenFromData = 0`, simulationCode
+  `000000000` with no error, balanceChanges / allowanceChanges /
+  authorityChanges all empty, risks all empty,
+  `requireConfirmation = false`.
+
+### Execute result
+- `baw contract-call execute --requestId 31a11796213e4623a0925ac7cc1d3143`
+  → orderId `26111800002063168777`, status `BROADCASTED`.
+- **Tx hash: `0x48edb32d4a54c1f9d4b103cae811395925e1d9efe2eb9745686c284b79ef5a5f`**
+- **Block: 134307672**, receipt status `0x1` (success).
+- **gasUsed: 1,288,404**; gasPrice ≈ 0.15747 gwei (backend-set, above
+  the 0.05 gwei spot seen earlier); **actual cost: 0.0002028842 BNB**.
+- Agentic BNB balance after: **0.0001755690 BNB**
+  (0.0003784532 − 0.0002028842 = 0.0001755690 ✓).
+
+### Post-deploy on-chain verification (all passed)
+- Contract lives at exactly the computed CREATE2 address:
+  **`0x6E477bffF71313805a5BE07F2Bf735e041FD7f0b`** ✓
+- Runtime code = **5,335 bytes**; byte-for-byte equal to the Foundry
+  artifact's deployedBytecode once the `AGENT_ID` immutable is patched
+  in (exactly 3 × 20-byte ranges — 1175–1194, 1580–1599, 2584–2603 —
+  hold the registry address on-chain vs. zeros in the artifact;
+  metadata tail identical) ✓
+- `AGENT_ID()` getter → `0x60B9262456dE011F7d15a54CdD8c48bAaa8B022F` ✓
+- `name()` = "StreakID Badge", `symbol()` = "STREAK" ✓
+
+### Source verification status
+- The README command (`forge verify-contract … --chain bsc
+  --constructor-args <constructor-args.txt>`) was run as-is. With no
+  Etherscan/BscScan API key in the environment, forge routed it to
+  **Sourcify**, which answered **"Contract source code already fully
+  verified"** (after one timeout retry and one HTTP 429 during
+  retries; no further requests were made to Sourcify after that).
+  → Source is **fully verified on Sourcify (full match)**.
+- **BscScan-side verification is NOT yet confirmed**: no BscScan API
+  key is available in this environment and the public BscScan page
+  fetch was rejected (HTTP 403). The standard-input JSON route in
+  `verification/` remains ready for the manual BscScan step
+  (submit `StreakID.standard-input.json` + constructor args
+  `00000000000000000000000060b9262456de011f7d15a54cdd8c48baaa8b022f…`
+  from `constructor-args.txt`).
+
+### Remaining (unchanged from §8)
+1. Set `STREAK_ID_ADDRESS` in `site/app.js` to the deployed address,
+   re-copy `site/` → `docs/`, push (site currently still placeholder).
+2. First real check-in from Panji's Agentic Wallet (his tap).
+3. Panji submits the in-app Binance survey (SUBMISSION_DRAFT.md now
+   carries the final contract address).
+4. Community drive: ≥ 30 unique Agent ID addresses check in before
+   2026-12-09 15:00 WIB.
