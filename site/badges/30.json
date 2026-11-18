@@ -1,0 +1,10 @@
+{
+  "name": "StreakID — 30-Day Streak Badge (Diamond)",
+  "description": "Awarded by the StreakID contract on BNB Chain to an Agent ID holder who checked in 30 days in a row. Soulbound: this badge can never be transferred or sold. It is a reputation record only and has no monetary value.",
+  "image": "https://kiowayyy2109.github.io/streakid/badges/badge-30.svg",
+  "attributes": [
+    { "trait_type": "Milestone", "value": "30-day streak" },
+    { "trait_type": "Tier", "value": "Diamond" },
+    { "trait_type": "Transferable", "value": "No — soulbound" }
+  ]
+}

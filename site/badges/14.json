@@ -1,0 +1,10 @@
+{
+  "name": "StreakID — 14-Day Streak Badge (Gold)",
+  "description": "Awarded by the StreakID contract on BNB Chain to an Agent ID holder who checked in 14 days in a row. Soulbound: this badge can never be transferred or sold. It is a reputation record only and has no monetary value.",
+  "image": "https://kiowayyy2109.github.io/streakid/badges/badge-14.svg",
+  "attributes": [
+    { "trait_type": "Milestone", "value": "14-day streak" },
+    { "trait_type": "Tier", "value": "Gold" },
+    { "trait_type": "Transferable", "value": "No — soulbound" }
+  ]
+}

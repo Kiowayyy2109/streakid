@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>StreakID — Daily Check-In for Agent ID Holders</title>
+<meta name="description" content="StreakID is a free daily check-in dApp exclusively for Agent ID holders on BNB Chain. Build your streak, earn soulbound milestone badges.">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔥</text></svg>">
+</head>
+<body>
+<header class="wrap">
+  <div class="brand">
+    <span class="logo">🔥</span>
+    <div>
+      <h1>StreakID</h1>
+      <p class="tagline">The daily check-in club for <strong>Agent ID</strong> holders — BNB Chain</p>
+    </div>
+  </div>
+  <button id="connectBtn" class="btn primary">Connect Wallet</button>
+</header>
+
+<main class="wrap">
+  <section class="card" id="statusCard">
+    <h2>Your Agent ID status</h2>
+    <div id="walletInfo" class="muted">Wallet not connected. You can still browse the leaderboard below — connecting is only needed to check in.</div>
+    <div id="agentIdInfo"></div>
+  </section>
+
+  <section class="card" id="statsCard" hidden>
+    <h2>Your streak</h2>
+    <div class="stats">
+      <div class="stat"><span class="num" id="statStreak">–</span><span class="lbl">Current streak (days)</span></div>
+      <div class="stat"><span class="num" id="statBest">–</span><span class="lbl">Best streak</span></div>
+      <div class="stat"><span class="num" id="statTotal">–</span><span class="lbl">Total check-ins</span></div>
+      <div class="stat"><span class="num" id="statPoints">–</span><span class="lbl">Reputation points</span></div>
+    </div>
+    <h3>Milestone badges <span class="muted">(soulbound — they can never be transferred or sold)</span></h3>
+    <div class="badges" id="badgeRow">
+      <div class="badge" data-tier="0"><span class="bicon">🥉</span>3 days</div>
+      <div class="badge" data-tier="1"><span class="bicon">🥈</span>7 days</div>
+      <div class="badge" data-tier="2"><span class="bicon">🥇</span>14 days</div>
+      <div class="badge" data-tier="3"><span class="bicon">💎</span>30 days</div>
+    </div>
+    <div class="row">
+      <button id="checkInBtn" class="btn primary big" disabled>Check in today</button>
+      <span id="nextInfo" class="muted"></span>
+    </div>
+    <p id="txInfo" class="muted"></p>
+  </section>
+
+  <section class="card">
+    <h2>Community</h2>
+    <p><span id="totalAgents" class="num-inline">…</span> Agent ID holders have checked in so far.</p>
+    <h3>Leaderboard <span class="muted">(this project's own check-in activity, read live from the blockchain)</span></h3>
+    <table id="board">
+      <thead><tr><th>#</th><th>Wallet</th><th>Streak</th><th>Check-ins</th><th>Points</th><th>Badges</th></tr></thead>
+      <tbody><tr><td colspan="6" class="muted">Loading…</td></tr></tbody>
+    </table>
+    <button id="refreshBoard" class="btn">Refresh</button>
+  </section>
+
+  <section class="card">
+    <h2>How it works</h2>
+    <ol>
+      <li><strong>Hold an Agent ID.</strong> Agent ID is the on-chain name (<em>name</em>.ai) of a Binance Agentic Wallet, issued by SPACE ID. StreakID checks the official Agent ID registry on BNB Chain — wallets without one cannot check in.</li>
+      <li><strong>Check in once a day (UTC).</strong> Every check-in is a transaction you review and confirm in your own wallet. StreakID never asks for approvals, never touches your assets, and has no admin keys.</li>
+      <li><strong>Keep the streak alive.</strong> Miss a day and the streak restarts at 1. Reach 3, 7, 14 or 30 days in a row to mint a soulbound badge that stays with your Agent ID forever.</li>
+    </ol>
+    <p class="muted">Points and badges are reputation records only. They are not tokens, cannot be traded, and have no monetary value. StreakID does not promise any return. Contract: <a id="contractLink" href="#" target="_blank" rel="noopener">view on BscScan</a> · <a href="https://github.com/Kiowayyy2109/streakid" target="_blank" rel="noopener">open-source code</a></p>
+  </section>
+</main>
+
+<footer class="wrap muted">
+  <p>StreakID is an independent community project built for the Agent ID Hackathon. It is not affiliated with Binance. Agent ID registry (SPACE ID): <span class="mono">0x60B9262456dE011F7d15a54CdD8c48bAaa8B022F</span></p>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
